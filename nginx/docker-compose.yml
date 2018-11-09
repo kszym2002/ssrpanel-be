@@ -43,7 +43,7 @@ services:
 
       
  ssrmu:
-    image: fanvinga/docker-ssrmu
+    image: easonsummer/ssrpanel-ssrmu
     restart: always
     network_mode: "host"
     volumes:
