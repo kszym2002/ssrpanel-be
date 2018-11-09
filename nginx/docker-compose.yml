@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+ v2ray:
+    image: easonsummer/ssrpanel-v2ray-docker:0.0.2
+    restart: always
+    ports:
+      - "7781:7781" 
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    volumes:
+      - ./v2ray/config.json:/root/v2ray-linux-64/config.json
+      - ./v2ray/config.properties:/root/ssrpanel-v2ray/config.properties
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+  
+ html-2048:
+    image: alexwhen/docker-2048
+    environment:
+      VIRTUAL_HOST: domin.com
+      CERT_NAME: domin.com
+    volumes:
+      - ./certs:/etc/nginx/certs
+    depends_on:
+      - v2ray
+      - nginx
+      
+ nginx:
+    image: jwilder/nginx-proxy
+    restart: always
+    links:
+      - v2ray:v2ray
+    ports:
+      - "80:80"
+      - "443:443" 
+    volumes:
+      - ./certs:/etc/nginx/certs
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+      
+ ssrmu:
+    image: fanvinga/docker-ssrmu
+    restart: always
+    network_mode: "host"
+    volumes:
+      - ./ssrmu/user-config.json:/root/shadowsocks/user-config.json
+      - ./ssrmu/userapiconfig.py:/root/shadowsocks/userapiconfig.py
+      - ./ssrmu/dns.conf:/root/shadowsocks/dns.conf
+    command: python /root/shadowsocks/server.py
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
