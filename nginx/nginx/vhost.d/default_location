@@ -1,4 +1,4 @@
-location /bo {
+location /panda {
         proxy_redirect off;
         proxy_pass http://v2ray:990;
         }
