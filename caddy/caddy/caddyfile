@@ -11,6 +11,8 @@ https://domain.com {
         key_type p384
     }
  
-    proxy /panda localhost:990 {
-         websocket
+    proxy /panda v2ray:990 {
+    websocket
+    header_upstream -Origin
+  }
 }
