@@ -19,7 +19,9 @@ services:
   
  html-2048:
     image: alexwhen/docker-2048
+    restart: always
     environment:
+      
       VIRTUAL_HOST: domin.com
       CERT_NAME: domin.com
     volumes:
@@ -39,8 +41,20 @@ services:
     volumes:
       - ./certs:/etc/nginx/certs
       - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - ./nginx/www:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
-
+      
+      
+      
+      
+docker run -d -p 80:80 -p 443:443 \
+    --name nginx-proxy \
+    -v /path/to/certs:/etc/nginx/certs:ro \
+    -v /etc/nginx/vhost.d \
+    -v /usr/share/nginx/html \
+    -v /var/run/docker.sock:/tmp/docker.sock:ro \
+    --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy \
+    jwilder/nginx-proxy
       
  ssrmu:
     image: easonsummer/ssrpanel-ssrmu
