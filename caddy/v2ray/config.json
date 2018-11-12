@@ -16,7 +16,7 @@
       "streamSettings": {
       "network": "ws",
       "wsSettings": {
-      "path": "/bo"
+      "path": "/panda"
       }
     },
     "tag": "proxy"
