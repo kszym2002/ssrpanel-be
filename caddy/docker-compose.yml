@@ -18,16 +18,17 @@ services:
         max-file: "3"
       
  caddy:
-    image: abiosoft/caddy
+    image: abiosoft/caddy:0.11.0-no-stats
     restart: always
     environment:
-      ACME_AGREE=true
+      - ACME_AGREE=true
     links:
       - v2ray:v2ray
     ports:
       - "80:80"
       - "443:443" 
     volumes:
+      - ./caddy/.caddy:/root/.caddy 
       - ./caddy/Caddyfile:/etc/Caddyfile
       - ./caddy/www:/srv/www
 

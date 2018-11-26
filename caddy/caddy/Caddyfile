@@ -1,17 +1,8 @@
-http://domain.com {
-    redir https://domain.com{url}
-}
- 
-https://domain.com {
-    root /srv/www/
- 
-    tls email {
-        ciphers ECDHE-ECDSA-WITH-CHACHA20-POLY1305 ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-ECDSA-AES256-CBC-SHA
-        curves p384
-        key_type p384
-    }
- 
-    proxy /panda v2ray:990 {
+domin.com 
+{
+  root /srv/www
+  tls youremail
+  proxy /panda v2ray:990 {
     websocket
     header_upstream -Origin
   }
