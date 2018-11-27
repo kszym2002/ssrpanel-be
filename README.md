@@ -7,3 +7,4 @@
 - [DDNS](https://github.com/kszym2002/ssrpanel-be/wiki/Dynamic-IP-ddns-docker)
 - [caddy](https://github.com/kszym2002/ssrpanel-be/wiki/caddy-proxy)
 - [caddy+H2+TLS]()
+- [v2ray-docker]()
