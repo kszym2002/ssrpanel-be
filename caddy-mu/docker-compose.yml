@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+ v2ray-1:
+    image: easonsummer/ssrpanel-v2ray-docker:0.0.2
+    restart: always
+    ports:
+      - "7781:7781" 
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    volumes:
+      - ./v2ray-1/config.json:/root/v2ray-linux-64/config.json
+      - ./v2ray-1/config.properties:/root/ssrpanel-v2ray/config.properties
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+        
+ v2ray-2:
+    image: easonsummer/ssrpanel-v2ray-docker:0.0.2
+    restart: always
+    ports:
+      - "7781:7781" 
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    volumes:
+      - ./v2ray-2/config.json:/root/v2ray-linux-64/config.json
+      - ./v2ray-2/config.properties:/root/ssrpanel-v2ray/config.properties
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+        
+ caddy:
+    image: abiosoft/caddy:0.11.0-no-stats
+    restart: always
+    environment:
+      - ACME_AGREE=true
+    links:
+      - v2ray:v2ray
+    ports:
+      - "80:80"
+      - "443:443" 
+    volumes:
+      - ./caddy/.caddy:/root/.caddy 
+      - ./caddy/Caddyfile:/etc/Caddyfile
+      - ./caddy/www:/srv/www
+
+ ssrmu-1:
+    image: easonsummer/ssrpanel-ssrmu
+    restart: always
+    network_mode: "host"
+    volumes:
+      - ./ssrmu-1/user-config.json:/root/shadowsocks/user-config.json
+      - ./ssrmu-1/usermysql.json:/root/shadowsocks/usermysql.json
+      - ./ssrmu-1/dns.conf:/root/shadowsocks/dns.conf
+    command: python /root/shadowsocks/server.py
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"

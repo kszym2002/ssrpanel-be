@@ -1,0 +1,9 @@
+domin.com 
+{
+  root /srv/www
+  tls youremail
+  proxy /panda v2ray:990 {
+    websocket
+    header_upstream -Origin
+  }
+}
