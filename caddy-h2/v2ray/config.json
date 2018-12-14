@@ -1,0 +1,79 @@
+{
+  "api": {
+    "services": [
+      "HandlerService",
+      "StatsService"
+    ],
+    "tag": "api"
+  },
+  "stats": {},
+  "inbound": {
+    "port": 990,
+    "protocol": "vmess",
+    "settings": {
+      "clients": []
+    },
+           "streamSettings": {
+        "network": "http",
+        "security": "tls",
+        "httpSettings": {
+          "path": "/veekxt_websocket_test",
+          "host": [
+            "veekxt.com"
+          ]
+        },
+        "tlsSettings": {
+          "certificates": [
+            {
+              "certificateFile": "/root/.acme.sh/veekxt.com/fullchain.cer",
+              "keyFile": "/root/.acme.sh/veekxt.com/veekxt.com.key"
+            }
+          ]
+        }
+      },
+      "listen": "127.0.0.1",
+    "tag": "proxy"
+  },
+  "inboundDetour": [
+    {
+      "listen": "0.0.0.0",
+      "port": 7781,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "0.0.0.0"
+      },
+      "tag": "api"
+    }
+  ],
+  "log": {
+    "access": "./access.log",
+    "error": "./error.log",
+    "loglevel": "debug"
+  },
+  "outbound": {
+    "protocol": "freedom",
+    "settings": {}
+  },
+  "routing": {
+    "settings": {
+      "rules": [
+        {
+          "inboundTag": [
+            "api"
+          ],
+          "outboundTag": "api",
+          "type": "field"
+        }
+      ]
+    },
+    "strategy": "rules"
+  },
+  "policy": {
+    "levels": {
+      "1": {
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    }
+  }
+}

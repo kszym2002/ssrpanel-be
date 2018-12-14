@@ -1,0 +1,10 @@
+domin.com {
+    tls youremail
+    root /srv/www
+
+    proxy /panda https://127.0.0.1:990  {
+        header_upstream Host "domin.com"
+        header_upstream X-Forwarded-Proto "https"
+        insecure_skip_verify
+    }
+}
