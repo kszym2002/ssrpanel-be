@@ -1,0 +1,66 @@
+{
+  "api": {
+    "services": [
+      "HandlerService",
+      "StatsService"
+    ],
+    "tag": "api"
+  },
+  "stats": {},
+  "inbound": {
+    "port": 991,
+    "protocol": "vmess",
+    "settings": {
+      "clients": []
+    },
+      "streamSettings": {
+      "network": "ws",
+      "wsSettings": {
+      "path": "/panda"
+      }
+    },
+    "tag": "proxy"
+  },
+  "inboundDetour": [
+    {
+      "listen": "0.0.0.0",
+      "port": 7782,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "0.0.0.0"
+      },
+      "tag": "api"
+    }
+  ],
+  "log": {
+    "access": "./access.log",
+    "error": "./error.log",
+    "loglevel": "debug"
+  },
+  "outbound": {
+    "protocol": "freedom",
+    "settings": {}
+  },
+  "routing": {
+    "settings": {
+      "rules": [
+        {
+          "inboundTag": [
+            "api"
+          ],
+          "outboundTag": "api",
+          "type": "field"
+        }
+      ]
+    },
+    "strategy": "rules"
+  },
+  "policy": {
+    "levels": {
+      "1": {
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    }
+  }
+}
