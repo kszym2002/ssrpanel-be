@@ -1,0 +1,25 @@
+{
+    "server": "0.0.0.0",
+    "server_ipv6": "::",
+    "server_port": 8388,
+    "local_address": "127.0.0.1",
+    "local_port": 1080,
+
+    "password": "m",
+    "method": "aes-192-ctr",
+    "protocol": "auth_sha1_v4_compatible",
+    "protocol_param": "",
+    "obfs": "tls1.2_ticket_auth_compatible",
+    "obfs_param": "",
+    "speed_limit_per_con": 0,
+    "speed_limit_per_user": 0,
+
+    "additional_ports" : {}, // only works under multi-user mode
+    "additional_ports_only" : false, // only works under multi-user mode
+    "timeout": 600,
+    "udp_timeout": 300,
+    "dns_ipv6": false,
+    "connect_verbose_info": 1,
+    "redirect": ["127.0.0.1:443"],
+    "fast_open": false
+}
