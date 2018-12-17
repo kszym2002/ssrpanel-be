@@ -1,0 +1,98 @@
+{
+  "log": {
+    "loglevel": "debug"
+  },
+  "api": {
+    "tag": "api",
+    "services": [
+      "HandlerService",
+      "LoggerService",
+      "StatsService"
+    ]
+  },
+  "stats": {},
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 7781,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
+      },
+      "tag": "api"
+    },
+    {
+      "tag": "proxy",
+      "listen": "127.0.0.1",
+      "port": 990,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [],
+        "disableInsecureEncryption": true,
+        "default": {
+          "level": 0,
+          "alterId": 16
+        }
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/panda"
+        }
+      }
+    }
+  ],
+  "outbounds": [{
+    "protocol": "freedom"
+  }],
+  "routing": {
+    "rules": [{
+      "type": "field",
+      "inboundTag": [ "api" ],
+      "outboundTag": "api"
+    }],
+    "strategy": "rules"
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    },
+    "system": {
+      "statsInboundUplink": true,
+      "statsInboundDownlink": true
+    }
+  },
+  "other": {
+    "plugins": {
+      "ssrpanel": {
+        // Node id on your SSR Panel
+        "nodeId": 1,
+        // every N seconds
+        "checkRate": 60,
+        // traffic rate
+        "trafficRate": 1.0,
+        // gRPC address
+        "gRPCAddr": "127.0.0.1:7781",
+        // user config
+        "user": {
+          // inbound tag, which inbound you would like add user to
+          "inboundTag": "proxy",
+          "level": 0,
+          "alterId": 16,
+          "security": "none"
+        },
+        // db connection
+        "mysql": {
+          "host": "127.0.0.1",
+          "port": 3306,
+          "user": "root",
+          "password": "ssrpanel",
+          "dbname": "ssrpanel"
+        }
+      }
+    }
+  }
+}
