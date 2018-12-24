@@ -10,7 +10,7 @@ services:
       - 1.1.1.1
       - 8.8.8.8
     volumes:
-      - ./v2ray/config.json:/root/v2ray/config.json
+      - ./v2ray/config.json:/usr/bin/v2ray/config.json
     logging:
       options:
         max-size: "10m"
