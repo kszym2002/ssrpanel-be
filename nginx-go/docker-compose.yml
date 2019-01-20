@@ -2,7 +2,7 @@ version: '3'
 
 services:
  v2ray:
-    image: easonsummer/ssrpanel-v2ray-docker:0.0.3
+    image: easonsummer/ssrpanel-v2ray-docker:go
     restart: always
     ports:
       - "7781:7781" 
