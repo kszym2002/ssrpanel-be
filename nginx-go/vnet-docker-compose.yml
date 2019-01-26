@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+ v2ray:
+    image: easonsummer/ssrpanel-v2ray-docker:go
+    restart: always
+    ports:
+      - "7781:7781" 
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    volumes:
+      - ./v2ray/config.json:/usr/bin/v2ray/config.json
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+  
+ html-2048:
+    image: alexwhen/docker-2048
+    restart: always
+    environment:
+      LETSENCRYPT_HOST: domin.com
+      LETSENCRYPT_EMAIL: email
+      VIRTUAL_HOST: domin.com
+    depends_on:
+      - v2ray
+      - nginx
+      - nginx-ssl
+      
+ nginx:
+    image: jwilder/nginx-proxy
+    restart: always
+    links:
+      - v2ray:v2ray
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    ports:
+      - "80:80"
+      - "443:443" 
+    volumes:
+      - ./certs:/etc/nginx/certs
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - ./nginx/www:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+ 
+ nginx-ssl:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    volumes:
+      - ./certs:/etc/nginx/certs
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - ./nginx/www:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      
+ vnet:
+    image: easonsummer/vnet-docker
+    restart: always
+    network_mode: "host"
+    volumes:
+      - ./vnet/config.json:/vnet/config.json
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
